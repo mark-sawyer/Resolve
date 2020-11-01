@@ -2,22 +2,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class MovableCard : MonoBehaviour {
-    private GameObject mouseInput;
-    private GameObject slot;
-    private SpriteRenderer sprite;
+    public Card card;
+    public readonly UnityEvent<GameObject> pickedUpFromStartSpace = new UnityEvent<GameObject>();
+    public readonly UnityEvent<GameObject> putBackInStartSpace = new UnityEvent<GameObject>();
+    private MouseInput mouseInput;
+    private SpriteRenderer sr;
     private Func<Vector3> getTargetPosition;
     private Action spriteAdjustment;
     private Vector3 defaultPosition;
+    private GameObject slot;
     private bool inSlot;
     private const float TRANSPARENT_ALPHA = 0.5f;
     private const float HELD_SCALE = 0.8f;
 
     private void Awake() {
-        mouseInput = GameObject.Find("mouse input");
-        sprite = GetComponent<SpriteRenderer>();
-        GetComponent<Clickable>().clicked.AddListener(startBeingHeld);
+        mouseInput = GameObject.Find("mouse input").GetComponent<MouseInput>();
+        sr = GetComponent<SpriteRenderer>();
+        enableMovement();
+        GameObject.Find("resolve").GetComponent<Compressable>().buttonPressed.AddListener(disableMovement);
+        GameObject.Find("slots").GetComponent<Slots>().allSlotsResolved.AddListener(enableMovement);
         defaultPosition = transform.position;
         getTargetPosition = () => defaultPosition;
         spriteAdjustment = () => { };
@@ -32,19 +38,22 @@ public class MovableCard : MonoBehaviour {
         if (inSlot) {
             releaseFromSlot();
         }
+        else {
+            pickedUpFromStartSpace.Invoke(gameObject);
+        }
         setSpriteAlpha(TRANSPARENT_ALPHA);
         setTransformScale(HELD_SCALE);
         getTargetPosition = () => (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
         spriteAdjustment = checkWhetherTransparent;
-        sprite.sortingOrder = 1;
-        mouseInput.GetComponent<MouseInput>().clickReleased.AddListener(stopBeingHeld);
+        sr.sortingOrder = 3;
+        mouseInput.clickReleased.AddListener(stopBeingHeld);
     }
 
     private void stopBeingHeld() {
         setSpriteAlpha(1);
         setTransformScale(1);
         spriteAdjustment = () => { };
-        sprite.sortingOrder = 0;
+        sr.sortingOrder = 2;
         mouseInput.GetComponent<MouseInput>().clickReleased.RemoveListener(stopBeingHeld);
         findUnheldPosition();
     }
@@ -54,8 +63,7 @@ public class MovableCard : MonoBehaviour {
             placeInSlot();
         }
         else {
-            transform.position = defaultPosition;
-            getTargetPosition = () => defaultPosition;
+            placeInStartSpace();
         }
     }
 
@@ -63,12 +71,6 @@ public class MovableCard : MonoBehaviour {
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         RaycastHit2D ray = Physics2D.Raycast(mousePos, Vector2.zero, 0, LayerMask.GetMask("slot"));
         return ray.collider != null && !ray.collider.GetComponent<Slot>().hasCard;
-    }
-
-    private GameObject getSlot() {
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        RaycastHit2D ray = Physics2D.Raycast(mousePos, Vector2.zero, 0, LayerMask.GetMask("slot"));
-        return ray.collider.gameObject;
     }
 
     private void releaseFromSlot() {
@@ -80,9 +82,21 @@ public class MovableCard : MonoBehaviour {
     private void placeInSlot() {
         inSlot = true;
         slot = getSlot();
-        slot.GetComponent<Slot>().setCard(gameObject);
+        slot.GetComponent<Slot>().setCard(card);
         transform.position = slot.transform.position;
         getTargetPosition = () => slot.transform.position;
+    }
+
+    private void placeInStartSpace() {
+        transform.position = defaultPosition;
+        getTargetPosition = () => defaultPosition;
+        putBackInStartSpace.Invoke(gameObject);
+    }
+
+    private GameObject getSlot() {
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        RaycastHit2D ray = Physics2D.Raycast(mousePos, Vector2.zero, 0, LayerMask.GetMask("slot"));
+        return ray.collider.gameObject;
     }
 
     private void checkWhetherTransparent() {
@@ -95,12 +109,20 @@ public class MovableCard : MonoBehaviour {
     }
 
     private void setSpriteAlpha(float alpha) {
-        Color temp = sprite.color;
+        Color temp = sr.color;
         temp.a = alpha;
-        sprite.color = temp;
+        sr.color = temp;
     }
 
     private void setTransformScale(float scale) {
         transform.localScale = new Vector3(scale, scale, scale);
+    }
+
+    private void disableMovement() {
+        GetComponent<Clickable>().clicked.RemoveListener(startBeingHeld);
+    }
+
+    private void enableMovement() {
+        GetComponent<Clickable>().clicked.AddListener(startBeingHeld);
     }
 }
