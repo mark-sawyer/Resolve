@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BlankCard : Card {
     public override void resolveCard() {
+        base.resolveCard();
         print("blank card");
         Invoke("destroyCard", 3);
     }

@@ -45,7 +45,7 @@ public class MovableCard : MonoBehaviour {
         setTransformScale(HELD_SCALE);
         getTargetPosition = () => (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
         spriteAdjustment = checkWhetherTransparent;
-        sr.sortingOrder = 3;
+        sr.sortingOrder = 4;
         mouseInput.clickReleased.AddListener(stopBeingHeld);
     }
 
@@ -53,7 +53,7 @@ public class MovableCard : MonoBehaviour {
         setSpriteAlpha(1);
         setTransformScale(1);
         spriteAdjustment = () => { };
-        sr.sortingOrder = 2;
+        sr.sortingOrder = 3;
         mouseInput.GetComponent<MouseInput>().clickReleased.RemoveListener(stopBeingHeld);
         findUnheldPosition();
     }

@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class RightCard : Card {
     public override void resolveCard() {
+        base.resolveCard();
+        character.getCard(this);
+        character.resolveRightCard();
         print("right card");
-        Invoke("destroyCard", 3);
     }
 
-    private void destroyCard() {
-        completeResolution();
+    public override void completeResolution() {
+        base.completeResolution();
         Destroy(gameObject);
     }
 }
