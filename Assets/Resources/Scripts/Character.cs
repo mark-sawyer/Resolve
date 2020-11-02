@@ -20,9 +20,9 @@ public class Character : MonoBehaviour {
         currentCard = card;
     }
 
-    public void resolveRightCard() {
-        if (spaceIsAvailable(Vector3.right)) {
-            goalPosition = transform.position + Vector3.right;
+    public void resolveDirectionCard(Vector3 direction) {
+        if (spaceIsAvailable(direction)) {
+            goalPosition = transform.position + direction;
             action = moveToGoalPosition;
         }
         else {

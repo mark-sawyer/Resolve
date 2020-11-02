@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RightCard : Card {
+public class DirectionCard : Card {
+    public Vector3 direction;
+
     public override void resolveCard() {
         base.resolveCard();
         character.getCard(this);
-        character.resolveRightCard();
-        print("right card");
+        character.resolveDirectionCard(direction);
     }
 
     public override void completeResolution() {

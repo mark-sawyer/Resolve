@@ -4,17 +4,20 @@ using UnityEngine;
 
 public class CardStartSpace : MonoBehaviour {
     public int number;
+    public GameObject cardPrefab;
     private Sprite[] numberSprites;
     private SpriteRenderer numberPanelSpriteRenderer;
     private GameObject cardInSpaceGameObject;
-    private Vector3 cardPosition;
+    private Vector3 RELATIVE_CARD_POSITION = new Vector3(0f, -0.359375f, 0f);
 
     private void Awake() {
         numberSprites = Resources.LoadAll<Sprite>("Sprites/numbers");
         numberPanelSpriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
         numberPanelSpriteRenderer.sprite = numberSprites[number];
-        setupCardInSpace(transform.GetChild(1).gameObject);
-        cardPosition = cardInSpaceGameObject.transform.position;
+
+        cardInSpaceGameObject = Instantiate(cardPrefab, transform.position + RELATIVE_CARD_POSITION, Quaternion.identity);
+        cardInSpaceGameObject.transform.parent = transform;
+        setupCardInSpace(cardInSpaceGameObject);
     }
 
     private void removeCardFromSpace(GameObject cardRemovedFromSpace) {
@@ -27,8 +30,7 @@ public class CardStartSpace : MonoBehaviour {
         }
 
         if (number > 0) {
-            GameObject sameCardType = getSameCardTypeGameObject(cardRemovedFromSpace.GetComponent<Card>());
-            GameObject nextCard = Instantiate(sameCardType, cardPosition, Quaternion.identity);
+            GameObject nextCard = Instantiate(cardPrefab, transform.position + RELATIVE_CARD_POSITION, Quaternion.identity);
             nextCard.transform.parent = transform;
             setupCardInSpace(nextCard);
         }
@@ -60,14 +62,5 @@ public class CardStartSpace : MonoBehaviour {
 
     private bool notInfinity() {
         return number != 10;
-    }
-
-    private GameObject getSameCardTypeGameObject(Card card) {
-        if (card is RightCard) {
-            return Resources.Load<GameObject>("Prefabs/Cards/right card");
-        }
-        else {
-            return Resources.Load<GameObject>("Prefabs/Cards/blank card");
-        }
     }
 }

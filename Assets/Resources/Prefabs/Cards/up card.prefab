@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1889958723937431676}
   - component: {fileID: 4894222462816660717}
   m_Layer: 0
-  m_Name: right card
+  m_Name: up card
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -75,7 +75,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 3
-  m_Sprite: {fileID: 21300000, guid: 3ff67cd868329a04f85f03bd3ac9604a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e8861323e6803dc4cac774816c676517, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -149,4 +149,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c09ba3112184b8542b8b0894a9a0795b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  direction: {x: 1, y: 0, z: 0}
+  direction: {x: 0, y: 1, z: 0}

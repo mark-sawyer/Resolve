@@ -34,7 +34,7 @@ public abstract class Card : MonoBehaviour {
         temp.a -= 0.0075f;
         sr.color = temp;
 
-        transform.localScale *= 1.001f;
+        transform.localScale *= 1.002f;
 
         if (temp.a < 0.01) {
             spriteAdjustment = () => { };

@@ -69,20 +69,20 @@ public class MovableCard : MonoBehaviour {
 
     private bool overEmptySlot() {
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        RaycastHit2D ray = Physics2D.Raycast(mousePos, Vector2.zero, 0, LayerMask.GetMask("slot"));
-        return ray.collider != null && !ray.collider.GetComponent<Slot>().hasCard;
+        RaycastHit2D ray = Physics2D.Raycast(mousePos, Vector2.zero, 0, LayerMask.GetMask("normal slot"));
+        return ray.collider != null && !ray.collider.GetComponent<NormalSlot>().hasCard;
     }
 
     private void releaseFromSlot() {
         inSlot = false;
-        slot.GetComponent<Slot>().removeCard();
+        slot.GetComponent<NormalSlot>().restoreSlotDefault();
         slot = null;
     }
 
     private void placeInSlot() {
         inSlot = true;
         slot = getSlot();
-        slot.GetComponent<Slot>().setCard(card);
+        slot.GetComponent<NormalSlot>().setCard(card);
         transform.position = slot.transform.position;
         getTargetPosition = () => slot.transform.position;
     }
@@ -95,7 +95,7 @@ public class MovableCard : MonoBehaviour {
 
     private GameObject getSlot() {
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        RaycastHit2D ray = Physics2D.Raycast(mousePos, Vector2.zero, 0, LayerMask.GetMask("slot"));
+        RaycastHit2D ray = Physics2D.Raycast(mousePos, Vector2.zero, 0, LayerMask.GetMask("normal slot"));
         return ray.collider.gameObject;
     }
 

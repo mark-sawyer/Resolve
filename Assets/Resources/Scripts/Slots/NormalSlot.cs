@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Slot : MonoBehaviour {
+public class NormalSlot : MonoBehaviour, Slot {
     public bool hasCard { get; private set; }
     private Animator anim;
     private BoxCollider2D bc;
@@ -13,7 +13,7 @@ public class Slot : MonoBehaviour {
     private void Awake() {
         anim = GetComponent<Animator>();
         bc = GetComponent<BoxCollider2D>();
-        nullCard = GetComponent<NullCard>();
+        nullCard = gameObject.AddComponent<NullCard>();
         card = nullCard;
     }
 
@@ -23,7 +23,7 @@ public class Slot : MonoBehaviour {
         bc.enabled = false;
     }
 
-    public void removeCard() {
+    public void restoreSlotDefault() {
         card = nullCard;
         hasCard = false;
         bc.enabled = true;

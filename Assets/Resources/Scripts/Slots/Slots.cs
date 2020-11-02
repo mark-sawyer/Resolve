@@ -13,7 +13,7 @@ public class Slots : MonoBehaviour {
         slotsResolved = 0;
         slots = new List<Slot>(numberOfSlots);
         for (int i = 0; i < numberOfSlots; i++) {
-            slots.Add(transform.GetChild(i).gameObject.GetComponent<Slot>());
+            slots.Add(transform.GetChild(i).GetComponent<Slot>());
         }
 
         GameObject.Find("resolve").GetComponent<Compressable>().buttonPressed.AddListener(resolvePressed);
@@ -35,7 +35,7 @@ public class Slots : MonoBehaviour {
             currentSlot.getResolutionEvent().AddListener(finalResolution);
         }
 
-        currentSlot.removeCard();
+        currentSlot.restoreSlotDefault();        
     }
 
     private void finalResolution() {
