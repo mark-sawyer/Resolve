@@ -22,8 +22,8 @@ public class MovableCard : MonoBehaviour {
         mouseInput = GameObject.Find("mouse input").GetComponent<MouseInput>();
         sr = GetComponent<SpriteRenderer>();
         enableMovement();
-        GameObject.Find("resolve").GetComponent<Compressable>().buttonPressed.AddListener(disableMovement);
-        GameObject.Find("slots").GetComponent<Slots>().allSlotsResolved.AddListener(enableMovement);
+        GameObject.Find("event handler").GetComponent<GameEvents>().aResolveWasPressed.AddListener(disableMovement);
+        GameObject.Find("event handler").GetComponent<GameEvents>().resolveFinalised.AddListener(enableMovement);
         defaultPosition = transform.position;
         getTargetPosition = () => defaultPosition;
         spriteAdjustment = () => { };
@@ -69,8 +69,8 @@ public class MovableCard : MonoBehaviour {
 
     private bool overEmptySlot() {
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        RaycastHit2D ray = Physics2D.Raycast(mousePos, Vector2.zero, 0, LayerMask.GetMask("normal slot"));
-        return ray.collider != null && !ray.collider.GetComponent<NormalSlot>().hasCard;
+        RaycastHit2D ray = Physics2D.Raycast(mousePos, Vector2.zero, 0, LayerMask.GetMask("slot"));
+        return ray.collider != null && !ray.collider.GetComponent<Slot>().hasCard();
     }
 
     private void releaseFromSlot() {
@@ -95,7 +95,7 @@ public class MovableCard : MonoBehaviour {
 
     private GameObject getSlot() {
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        RaycastHit2D ray = Physics2D.Raycast(mousePos, Vector2.zero, 0, LayerMask.GetMask("normal slot"));
+        RaycastHit2D ray = Physics2D.Raycast(mousePos, Vector2.zero, 0, LayerMask.GetMask("slot"));
         return ray.collider.gameObject;
     }
 

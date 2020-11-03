@@ -9,4 +9,6 @@ public interface Slot {
     UnityEvent getResolutionEvent();
 
     void restoreSlotDefault();
+
+    bool hasCard();
 }

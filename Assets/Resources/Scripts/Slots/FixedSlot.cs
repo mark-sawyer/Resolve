@@ -33,4 +33,8 @@ public class FixedSlot : MonoBehaviour, Slot {
     public void restoreSlotDefault() {
         card = cardGameObject.GetComponent<Card>();
     }
+
+    public bool hasCard() {
+        return true;
+    }
 }

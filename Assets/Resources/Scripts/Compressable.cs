@@ -8,7 +8,7 @@ public class Compressable : MonoBehaviour {
     public Sprite uncompressed;
     public Sprite compressed;
     public readonly UnityEvent buttonPressed = new UnityEvent();
-    private BoxCollider2D bc;
+    private Collider2D bc;
     private MouseInput mouseInput;
     private SpriteRenderer sr;
     private Action spriteAdjustment;
@@ -16,7 +16,7 @@ public class Compressable : MonoBehaviour {
     void Awake() {
         enableButton();
         sr = GetComponent<SpriteRenderer>();
-        bc = GetComponent<BoxCollider2D>();
+        bc = GetComponent<Collider2D>();
         mouseInput = GameObject.Find("mouse input").GetComponent<MouseInput>();
         spriteAdjustment = () => { };
     }

@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.Events;
 
 public class NormalSlot : MonoBehaviour, Slot {
-    public bool hasCard { get; private set; }
     private Animator anim;
     private BoxCollider2D bc;
     private Card card;
@@ -19,13 +18,11 @@ public class NormalSlot : MonoBehaviour, Slot {
 
     public void setCard(Card card) {
         this.card = card;
-        hasCard = true;
         bc.enabled = false;
     }
 
     public void restoreSlotDefault() {
         card = nullCard;
-        hasCard = false;
         bc.enabled = true;
     }
 
@@ -36,5 +33,9 @@ public class NormalSlot : MonoBehaviour, Slot {
 
     public UnityEvent getResolutionEvent() {
         return card.resolutionComplete;
+    }
+
+    public bool hasCard() {
+        return card != nullCard;
     }
 }
