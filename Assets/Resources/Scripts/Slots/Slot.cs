@@ -6,8 +6,6 @@ using UnityEngine.Events;
 public interface Slot {
     void resolveCard();
 
-    UnityEvent getResolutionEvent();
-
     void restoreSlotDefault();
 
     bool hasCard();

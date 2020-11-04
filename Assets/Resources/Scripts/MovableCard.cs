@@ -22,8 +22,8 @@ public class MovableCard : MonoBehaviour {
         mouseInput = GameObject.Find("mouse input").GetComponent<MouseInput>();
         sr = GetComponent<SpriteRenderer>();
         enableMovement();
-        GameObject.Find("event handler").GetComponent<GameEvents>().aResolveWasPressed.AddListener(disableMovement);
-        GameObject.Find("event handler").GetComponent<GameEvents>().resolveFinalised.AddListener(enableMovement);
+        GameEvents.aResolveWasPressed.AddListener(disableMovement);
+        GameEvents.resolveFinalised.AddListener(enableMovement);
         defaultPosition = transform.position;
         getTargetPosition = () => defaultPosition;
         spriteAdjustment = () => { };

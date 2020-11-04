@@ -1,0 +1,4 @@
+no slot lists
+resolves give a direction (new class?)
+after a resolve completes, sense if there is a card in the next position. Resolve it.
+Direction might change.

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 public class GameEvents : MonoBehaviour {
-    public readonly UnityEvent aResolveWasPressed = new UnityEvent();
-    public readonly UnityEvent resolveFinalised = new UnityEvent();
+    public static readonly UnityEvent aResolveWasPressed = new UnityEvent();
+    public static readonly UnityEvent cardFinishedResolving = new UnityEvent();
+    public static readonly UnityEvent resolveFinalised = new UnityEvent();
 }

@@ -26,10 +26,6 @@ public class FixedSlot : MonoBehaviour, Slot {
         Destroy(cardGameObject.GetComponent<Clickable>());
     }
 
-    public UnityEvent getResolutionEvent() {
-        return card.resolutionComplete;
-    }
-
     public void restoreSlotDefault() {
         card = cardGameObject.GetComponent<Card>();
     }

@@ -18,10 +18,14 @@ public class MouseInput : MonoBehaviour {
 
     private void click() {
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        RaycastHit2D ray = Physics2D.Raycast(mousePos, Vector2.zero);
-        if (ray.collider != null && ray.collider.GetComponent<Clickable>() != null) {
-            Clickable clickable = ray.collider.GetComponent<Clickable>();
-            clickable.respondToClick();
+        RaycastHit2D[] ray = Physics2D.RaycastAll(mousePos, Vector2.zero);
+        if (ray.Length != 0) {
+            for (int i = 0; i < ray.Length; i++) {
+                if (ray[i].collider.GetComponent<Clickable>() != null) {
+                    ray[i].collider.GetComponent<Clickable>().respondToClick();
+                    break;
+                }
+            }
         }
     }
 

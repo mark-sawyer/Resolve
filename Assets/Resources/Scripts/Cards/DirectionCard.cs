@@ -6,13 +6,12 @@ public class DirectionCard : Card {
     public Vector3 direction;
 
     public override void resolveCard() {
-        base.resolveCard();
+        startGrowAndFadeAnimation();
         character.getCard(this);
         character.resolveDirectionCard(direction);
     }
 
     public override void completeResolution() {
-        base.completeResolution();
-        Destroy(gameObject);
+        GameEvents.cardFinishedResolving.Invoke();
     }
 }

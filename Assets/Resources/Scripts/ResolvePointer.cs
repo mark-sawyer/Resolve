@@ -4,65 +4,24 @@ using UnityEngine;
 using UnityEngine.Events;
 
 public class ResolvePointer : MonoBehaviour {
-    private GameEvents gameEvents;
     private Compressable compressable;
+    private GameObject resolver;
     public DirectionEnum direction;
     public Sprite disabledSprite;
-    private List<Slot> slots;
-    public int numberOfSlots;
-    private int slotsResolved;
-    private float JUMP_AMOUNT = 3;
 
     private void Awake() {
-        slotsResolved = 0;
-        slots = new List<Slot>();
+        resolver = Resources.Load<GameObject>("Prefabs/resolver");
         compressable = GetComponent<Compressable>();
         compressable.buttonPressed.AddListener(resolvePressed);
-        gameEvents = GameObject.Find("event handler").GetComponent<GameEvents>();
-        gameEvents.aResolveWasPressed.AddListener(disableButton);
-        gameEvents.resolveFinalised.AddListener(enableButton);
-    }
-
-    private void Start() {
-        Vector3 directionVector = Direction.getDir(direction);
-        bool foundNoSlot = false;
-        int spacesAhead = 1;
-        while (!foundNoSlot) {
-            Vector2 location = transform.position + (directionVector * spacesAhead * JUMP_AMOUNT);
-            RaycastHit2D ray = Physics2D.Raycast(location, Vector2.zero, 0, LayerMask.GetMask("slot"));
-            if (ray.collider != null) {
-                slots.Add(ray.collider.GetComponent<Slot>());
-                spacesAhead++;
-            }
-            else {
-                foundNoSlot = true;
-                numberOfSlots = slots.Count;
-            }
-        }
+        GameEvents.aResolveWasPressed.AddListener(disableButton);
+        GameEvents.resolveFinalised.AddListener(enableButton);
     }
 
     private void resolvePressed() {
-        gameEvents.aResolveWasPressed.Invoke();
-        slotsResolved = 0;
-        resolveNextCard();
-    }
-
-    private void resolveNextCard() {
-        Slot currentSlot = slots[slotsResolved];
-        currentSlot.resolveCard();
-        slotsResolved++;
-        if (slotsResolved < numberOfSlots) {
-            currentSlot.getResolutionEvent().AddListener(resolveNextCard);
-        }
-        else {
-            currentSlot.getResolutionEvent().AddListener(finalResolution);
-        }
-
-        currentSlot.restoreSlotDefault();
-    }
-
-    private void finalResolution() {
-        gameEvents.resolveFinalised.Invoke();
+        GameObject newResolver = Instantiate(resolver, transform.position + (Direction.getDir(direction) * Constants.SLOT_DISTANCE), Quaternion.identity);
+        newResolver.GetComponent<Resolver>().setDirection(direction);
+        newResolver.GetComponent<Resolver>().attemptResolve();
+        GameEvents.aResolveWasPressed.Invoke();
     }
 
     private void disableButton() {

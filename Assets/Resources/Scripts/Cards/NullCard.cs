@@ -7,4 +7,7 @@ public class NullCard : Card {
         print("null card");
         Invoke("completeResolution", 3);
     }
+    public override void completeResolution() {
+        GameEvents.cardFinishedResolving.Invoke();
+    }
 }

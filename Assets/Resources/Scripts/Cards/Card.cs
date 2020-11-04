@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.Events;
 
 public abstract class Card : MonoBehaviour {
-    public readonly UnityEvent resolutionComplete = new UnityEvent();
     private Action spriteAdjustment;
     private SpriteRenderer sr;
     protected Character character;
@@ -20,13 +19,12 @@ public abstract class Card : MonoBehaviour {
         spriteAdjustment();
     }
 
-    public virtual void resolveCard() {
-        spriteAdjustment = growAndFade;
-    }
+    public abstract void resolveCard();
 
-    public virtual void completeResolution() {
-        resolutionComplete.Invoke();
-        resolutionComplete.RemoveAllListeners();
+    public abstract void completeResolution();
+
+    public void startGrowAndFadeAnimation() {
+        spriteAdjustment = growAndFade;
     }
 
     private void growAndFade() {
